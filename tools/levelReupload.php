@@ -16,8 +16,40 @@ function chkarray($source){
 include "../incl/lib/connection.php";
 require "../incl/lib/XORCipher.php";
 require "../config/reuploadAcc.php";
-require_once "../incl/lib/mainLib.php";
-$gs = new mainLib();
+$xc = new XORCipher();
+//////////
+////
+////
+if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+	$ms = $_SERVER['HTTP_CLIENT_IP'];
+} elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+	$ms = $_SERVER['HTTP_X_FORWARDED_FOR'];
+} else {
+	$ms = $_SERVER['REMOTE_ADDR'];
+}
+
+$rehs = $db->prepare("SELECT COUNT(*) FROM clIP WHERE IP = :IP");
+$rehs->execute([':IP' => $ms]);
+$total = $rehs->fetchColumn();
+if($total < 40)
+{
+$lol = $db->prepare("INSERT INTO clIP VALUES (:IP)");
+$lol->execute([':IP' => $ms]);
+}
+else
+{
+	exit("dd");
+}
+ // всего записей
+if($total > 21)
+{
+	echo "Превышен лимит!";
+die();
+}
+////
+////
+//////////
+//////////
 if(!empty($_POST["levelid"])){
 	$levelID = $_POST["levelid"];
 	$levelID = preg_replace("/[^0-9]/", '', $levelID);
@@ -78,7 +110,13 @@ if(!empty($_POST["levelid"])){
 			if($parsedurl["host"] == $_SERVER['SERVER_NAME']){
 				exit("You're attempting to reupload from the target server.");
 			}
-			$hostname = $gs->getIP();
+			if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+				$hostname = $_SERVER['HTTP_CLIENT_IP'];
+			} elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+				$hostname = $_SERVER['HTTP_X_FORWARDED_FOR'];
+			} else {
+				$hostname = $_SERVER['REMOTE_ADDR'];
+			}
 			//values
 			$twoPlayer = chkarray($levelarray["a31"]);
 			$songID = chkarray($levelarray["a35"]);
@@ -87,10 +125,7 @@ if(!empty($_POST["levelid"])){
 			$extraString = chkarray($levelarray["a36"]);
 			$starStars = chkarray($levelarray["a18"]);
 			$isLDM = chkarray($levelarray["a40"]);
-			$password = chkarray($levelarray["a27"]);
-			if($password != "0"){
-				$password = XORCipher::cipher(base64_decode($password),26364);
-			}
+			$password = chkarray($xc->cipher(base64_decode($levelarray["a27"]),26364));
 			$starCoins = 0;
 			$starDiff = 0;
 			$starDemon = 0;
@@ -129,14 +164,10 @@ if(!empty($_POST["levelid"])){
 		}
 	}
 }else{
-	echo '<h4><a href="linkAcc.php">LINKING YOUR ACCOUNT USING linkAcc.php RECOMMENDED</a></h4>
-		<form action="levelReupload.php" method="post">ID: <input type="text" name="levelid"><br>
-		<details>
-		    <summary>Advanced options</summary>
-		    URL: <input type="text" name="server" value="http://www.boomlings.com/database/downloadGJLevel22.php"><br>
-			Debug Mode (0=off, 1=on): <input type="text" name="debug" value="0"><br>
-		</details>
-		<input type="submit" value="Reupload"></form>';
+	echo '<h4><a href="linkAcc.php">LINKING YOUR ACCOUNT USING linkAcc.php RECOMMENDED</a></h4><form action="levelReupload.php" method="post">ID: <input type="text" name="levelid"><br>URL (dont change if you dont know what youre doing): <input type="text" name="server" value="http://www.boomlings.com/database/downloadGJLevel22.php"><br>Debug Mode (0=off, 1=on): <input type="text" name="debug" value="0"><br><input type="submit" value="Reupload"></form><br>Alternative servers to reupload from:<br>
+	http://www.boomlings.com/database/downloadGJLevel22.php - Robtops server<br>
+	http://pi.michaelbrabec.cz:9010/a/downloadGJLevel22.php - CvoltonGDPS<br>
+	http://teamhax.altervista.org/dbh/downloadGJLevel22.php - TeamHax GDPS';
 }
 ?>
 </body>
