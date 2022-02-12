@@ -5,6 +5,7 @@ include "../lib/connection.php";
 require_once "../lib/GJPCheck.php";
 require_once "../lib/exploitPatch.php";
 require_once "../lib/mainLib.php";
+require_once "../../config/webhook.php";
 $mainLib = new mainLib();
 require_once "../lib/mainLib.php";
 $gs = new mainLib();
@@ -117,6 +118,50 @@ if($query->fetchColumn() > 0){
 $query = $db->prepare("INSERT INTO levels (levelName, gameVersion, binaryVersion, userName, levelDesc, levelVersion, levelLength, audioTrack, auto, password, original, twoPlayer, songID, objects, coins, requestedStars, extraString, levelString, levelInfo, secret, uploadDate, userID, extID, updateDate, unlisted, hostname, isLDM)
 VALUES (:levelName, :gameVersion, :binaryVersion, :userName, :levelDesc, :levelVersion, :levelLength, :audioTrack, :auto, :password, :original, :twoPlayer, :songID, :objects, :coins, :requestedStars, :extraString, :levelString, :levelInfo, :secret, :uploadDate, :userID, :id, :uploadDate, :unlisted, :hostname, :ldm)");
 
+if($webhook != "" && $hookNewLevels) {
+	$json_data = json_encode([
+		"tts" => false,
+		"embeds" => [
+			[
+				"title" => "New Level",
+				"type" => "rich",
+				"color" => hexdec("5a62ff"),
+				"fields" => [
+					[
+						"name" => "Author Name:",
+						"value" => $userName,
+						"inline" => true
+					],
+					[
+						"name" => "Level Name:",
+						"value" => $levelName,
+						"inline" => true
+					],
+					[
+						"name" => "Stars Requested:",
+						"value" => $requestedStars,
+						"inline" => true
+					],
+					[
+						"name" => "Objects:",
+						"value" => $objects,
+						"inline" => true
+					]
+				]
+			]
+		]
+
+	], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+	$ch = curl_init($webhook);
+	curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-type: application/json'));
+	curl_setopt($ch, CURLOPT_POST, 1);
+	curl_setopt($ch, CURLOPT_POSTFIELDS, $json_data);
+	curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+	curl_setopt($ch, CURLOPT_HEADER, 0);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+	$response = curl_exec($ch);
+	curl_close($ch);
+}
 
 if($levelString != "" AND $levelName != ""){
 	$querye=$db->prepare("SELECT levelID FROM levels WHERE levelName = :levelName AND userID = :userID");
