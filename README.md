@@ -12,12 +12,14 @@ Required version of PHP: 5.4+ (tested up to 7.3.11)
 3. Spam attack blocked
 4. Auto creator points
 5. Discord bot
+6. Webhook in discord
 
 ### Setup
 1) Upload the files on a webserver
 2) Import database.sql into a MySQL/MariaDB database
 3) Edit the links in GeometryDash.exe (some are base64 encoded since 2.1, remember that)
 4) Edit file discord.php
+5) edit webhook.php
 
 ### Credits
 Base for account settings and the private messaging system by someguy28
