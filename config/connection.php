@@ -1,7 +1,7 @@
 <?php
-$servername = "127.0.0.1";
+$servername = "localhost";
 $port = 3306;
-$username = "root";
+$username = "";
 $password = "";
-$dbname = "geometrydash";
+$dbname = "";
 ?>
