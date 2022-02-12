@@ -6,6 +6,9 @@ Supported version of Geometry Dash: 1.0 - 2.11 (so any version of Geometry Dash 
 
 Required version of PHP: 5.4+ (tested up to 7.3.11)
 
+### Special Thanks
+Mysteryio
+
 ### What does this version have?
 1. Anticheat
 2. LikeBot attack blocking
