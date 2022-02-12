@@ -6,10 +6,18 @@ Supported version of Geometry Dash: 1.0 - 2.11 (so any version of Geometry Dash 
 
 Required version of PHP: 5.4+ (tested up to 7.3.11)
 
+### What does this version have?
+1. Anticheat
+2. LikeBot attack blocking
+3. Spam attack blocked
+4. Auto creator points
+5. Discord bot
+
 ### Setup
 1) Upload the files on a webserver
 2) Import database.sql into a MySQL/MariaDB database
 3) Edit the links in GeometryDash.exe (some are base64 encoded since 2.1, remember that)
+4) Edit file discord.php
 
 ### Credits
 Base for account settings and the private messaging system by someguy28
