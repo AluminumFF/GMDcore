@@ -12,6 +12,7 @@
 		<th>Song Name</th>
 		<th>Song Author</th>
 		<th>Size</th>
+		<th>Song</th>
 	</tr>
 
 	<?php
@@ -38,11 +39,11 @@
 	} else {
 		$name = 'reupload';
 	}
-	$query = $db->prepare("SELECT ID,name,authorName,size FROM songs WHERE " . $searchType . " LIKE CONCAT('%', :name, '%') ORDER BY ID DESC LIMIT 5000");
+	$query = $db->prepare("SELECT ID,name,authorName,size,download FROM songs WHERE " . $searchType . " LIKE CONCAT('%', :name, '%') ORDER BY ID DESC LIMIT 5000");
 	$query->execute([':name' => $name]);
 	$result = $query->fetchAll();
 	foreach ($result as &$song) {
-		echo "<tr><td>" . $song["ID"] . "</td><td>" . htmlspecialchars($song["name"], ENT_QUOTES) . "</td><td>" . $song['authorName'] . "</td><td>" . $song['size'] . "mb</td></tr>";
+		echo "<tr><td>" . $song["ID"] . "</td><td>" . htmlspecialchars($song["name"], ENT_QUOTES) . "</td><td>" . $song['authorName'] . "</td><td>" . $song['size'] . "mb</td><td><audio><source src='".$song['download']."'></audio></td></tr>";
 	}
 	?>
 </table>
