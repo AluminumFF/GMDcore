@@ -4,6 +4,7 @@ chdir(dirname(__FILE__));
 include "../lib/connection.php";
 require_once "../lib/exploitPatch.php";
 require_once "../lib/GJPCheck.php";
+include "autoban.php";
 $stars = 0;
 $count = 0;
 $xi = 0;
