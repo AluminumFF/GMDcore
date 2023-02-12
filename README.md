@@ -1,7 +1,5 @@
 # GMDcore
-This version of the kernel no longer works, some functions no longer work, the rest more or less work, there may be a new version, but this is not certain.
-
-If the kernel is still updated, it will not be published immediately, write to me https://t.me/aluminum228
+No works (old version) for newest version write to my telegram t.me/@Aluminum228
 ## Geometry Dash Private Server
 Cvolton better version!
 
