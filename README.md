@@ -1,5 +1,3 @@
-# GMDcore
-No works (old version) for newest version write to my telegram t.me/@Aluminum228
 ## Geometry Dash Private Server
 Cvolton better version!
 
